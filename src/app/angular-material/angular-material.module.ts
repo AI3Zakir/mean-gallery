@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import {
   MatButtonModule,
   MatCardModule, MatDialogModule,
-  MatExpansionModule,
+  MatExpansionModule, MatIconModule,
   MatInputModule, MatPaginatorModule,
   MatProgressSpinnerModule,
-  MatToolbarModule
+  MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 
 @NgModule({
@@ -18,6 +18,8 @@ import {
     MatProgressSpinnerModule,
     MatPaginatorModule,
     MatDialogModule,
+    MatIconModule,
+    MatTooltipModule
   ],
   exports: [
     MatInputModule,
@@ -28,6 +30,8 @@ import {
     MatProgressSpinnerModule,
     MatPaginatorModule,
     MatDialogModule,
+    MatIconModule,
+    MatTooltipModule
   ],
 })
 export class AngularMaterialModule { }

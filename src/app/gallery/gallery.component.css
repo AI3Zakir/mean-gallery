@@ -1,0 +1,10 @@
+.image-fab{
+  right: 20px;
+  bottom: 20px;
+  position: fixed !important;
+}
+.gallery-fab{
+  right: 80px;
+  bottom: 20px;
+  position: fixed !important;
+}
