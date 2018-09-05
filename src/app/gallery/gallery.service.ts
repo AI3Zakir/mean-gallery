@@ -12,7 +12,7 @@ const ALBUMS_API_URL = environment.apiUrl + '/api/photos';
 })
 export class GalleryService {
   private photos: Photo[] = [];
-  private photosUpdated = new Subject<{photos: Photo[]}>();
+  private photosUpdated = new Subject<Photo[]>();
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
@@ -20,7 +20,7 @@ export class GalleryService {
     return this.photosUpdated.asObservable();
   }
 
-  addPhoto(title: string, image: File, parentId: string) {
+  addPhoto(title: string, image: File, parentId: string = '') {
     const photoData = new FormData();
     photoData.append('title', title);
     photoData.append('parentId', parentId);
@@ -29,12 +29,12 @@ export class GalleryService {
     this.httpClient.post<{message: string, photo: Photo}>(PHOTOS_API_URL, photoData)
       .subscribe((addedPost) => {
         this.photos.push(addedPost.photo);
-        this.photosUpdated.next({ photos: [...this.photos] });
+        this.photosUpdated.next([...this.photos]);
         this.router.navigate(['/']);
       });
   }
 
-  updatePhoto(id: string, title: string, image: File | string, parentId: string) {
+  updatePhoto(id: string, title: string, image: File | string, parentId: string = '') {
     let photoData: Photo | FormData;
     if (typeof(image) === 'object') {
       photoData = new FormData();
@@ -51,7 +51,7 @@ export class GalleryService {
         const oldPostIndex = updatedPosts.findIndex(p => p._id === id);
         updatedPosts[oldPostIndex] = {_id: id, title: title, image: '', parentId: parentId, userId: ''};
         this.photos = updatedPosts;
-        this.photosUpdated.next({ photos: [...this.photos] });
+        this.photosUpdated.next([...this.photos] );
         this.router.navigate(['/']);
       });
   }
@@ -63,5 +63,15 @@ export class GalleryService {
 
   deletePhoto(id: string) {
     return this.httpClient.delete(PHOTOS_API_URL + '/' + id);
+  }
+
+  getPhotos() {
+    this.httpClient.get<{ message: string, photos: any }>(PHOTOS_API_URL)
+      .subscribe(
+        (response) => {
+          this.photos = response.photos;
+          this.photosUpdated.next([...this.photos]);
+        }
+      );
   }
 }

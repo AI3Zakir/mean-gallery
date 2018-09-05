@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UploadPhotoDialogComponent } from './upload-photo-dialog/upload-photo-dialog.component';
 import { MatDialog } from '@angular/material';
+import { Photo } from './models/photo.model';
+import { Subscription } from 'rxjs';
+import { GalleryService } from './gallery.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-gallery',
@@ -8,10 +12,22 @@ import { MatDialog } from '@angular/material';
   styleUrls: ['./gallery.component.css']
 })
 export class GalleryComponent implements OnInit {
+  private photosSubscriber: Subscription;
+  photos: Photo[];
+  isLoading = false;
+  serverUrl = environment.apiUrl;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private galleryService: GalleryService) {
+  }
 
   ngOnInit() {
+    this.isLoading = true;
+    this.photosSubscriber = this.galleryService.getPhotosObservable()
+      .subscribe((photos: Photo[]) => {
+        this.photos = photos;
+        this.isLoading = false;
+      });
+    this.galleryService.getPhotos();
   }
 
   openUploadPhotoDialog() {

@@ -3,7 +3,7 @@ const Photo = require('../models/photo');
 exports.createPhoto = (req, res, next) => {
   const photo = new Photo({
     title: req.body.title,
-    image: "/uploads/images/" + req.file.filename,
+    image: "/uploads/photos/" + req.file.filename,
     parentId: req.body.parentId,
     userId: req.userData.userId
   });
@@ -26,8 +26,7 @@ exports.getPhotos = (req, res, next) => {
     .then((photos) => {
       res.status(200).json({
         message: 'Photos successfully fetched',
-        photos: photos,
-        count: count
+        photos: photos
       });
     })
     .catch((error) => {
@@ -54,9 +53,9 @@ exports.getPhoto = (req, res, next) => {
     });
 };
 exports.updatePhoto = (req, res, next) => {
-  let image = req.body.imagePath;
+  let image = req.body.image;
   if (req.file) {
-    image = "/images/" + req.file.filename;
+    image = "/uploads/photos/" + req.file.filename;
   }
   const photo = new Photo({
     _id: req.body.id,

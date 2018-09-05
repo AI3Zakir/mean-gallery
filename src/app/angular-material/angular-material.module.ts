@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import {
   MatButtonModule,
   MatCardModule, MatDialogModule,
-  MatExpansionModule, MatIconModule,
+  MatExpansionModule, MatGridListModule, MatIconModule,
   MatInputModule, MatPaginatorModule,
   MatProgressSpinnerModule,
   MatToolbarModule, MatTooltipModule
@@ -19,7 +19,8 @@ import {
     MatPaginatorModule,
     MatDialogModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatGridListModule
   ],
   exports: [
     MatInputModule,
@@ -31,7 +32,8 @@ import {
     MatPaginatorModule,
     MatDialogModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatGridListModule
   ],
 })
 export class AngularMaterialModule { }

@@ -3,8 +3,19 @@
   bottom: 20px;
   position: fixed !important;
 }
+
 .gallery-fab{
   right: 80px;
   bottom: 20px;
   position: fixed !important;
+}
+
+.photo-card{
+  margin: 1rem;
+}
+mat-card-title {
+  text-align: center;
+}
+mat-card-actions button {
+  margin: 5px;
 }

@@ -1,3 +1,19 @@
+<mat-grid-list cols="3" rowHeight="400px">
+  <mat-grid-tile *ngFor="let photo of photos">
+    <mat-card class="photo-card">
+      <mat-card-header>
+        <mat-card-title>
+          <p class="mat-h2">{{ photo.title }}</p>
+        </mat-card-title>
+      </mat-card-header>
+      <img mat-card-image [src]="serverUrl + photo.image" [alt]="photo.title">
+      <mat-card-actions>
+        <button mat-stroked-button color="primary">Edit</button>
+        <button mat-stroked-button color="warn">Delete</button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
 <button
   mat-fab
   class="gallery-fab"
