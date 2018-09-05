@@ -8,7 +8,7 @@
       </mat-card-header>
       <img mat-card-image [src]="serverUrl + photo.image" [alt]="photo.title">
       <mat-card-actions>
-        <button mat-stroked-button color="primary">Edit</button>
+        <button mat-stroked-button color="primary" (click)="openUploadPhotoDialog(photo._id)">Edit</button>
         <button mat-stroked-button color="warn">Delete</button>
       </mat-card-actions>
     </mat-card>

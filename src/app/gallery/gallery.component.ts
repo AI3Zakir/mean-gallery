@@ -30,10 +30,10 @@ export class GalleryComponent implements OnInit {
     this.galleryService.getPhotos();
   }
 
-  openUploadPhotoDialog() {
+  openUploadPhotoDialog(id: string = null) {
     const dialogRef = this.dialog.open(UploadPhotoDialogComponent, {
       width: '500px',
-      data: {id: null}
+      data: {id: id}
     });
 
     dialogRef.afterClosed().subscribe(result => {

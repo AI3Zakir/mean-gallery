@@ -43,7 +43,6 @@ export class UploadPhotoDialogComponent implements OnInit {
         this.imagePreview = this.serverUrl + this.photo.image;
       });
     } else {
-      console.log('CREATE');
       this.mode = 'CREATE';
       this.id = null;
     }

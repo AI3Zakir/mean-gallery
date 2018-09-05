@@ -45,11 +45,11 @@ export class GalleryService {
     } else {
       photoData = { _id: id, title: title, image: image, parentId: parentId, userId: null};
     }
-    this.httpClient.put(PHOTOS_API_URL + '/' + id, photoData)
+    this.httpClient.put<{message: string, photo: Photo}>(PHOTOS_API_URL + '/' + id, photoData)
       .subscribe(response => {
         const updatedPosts = [...this.photos];
         const oldPostIndex = updatedPosts.findIndex(p => p._id === id);
-        updatedPosts[oldPostIndex] = {_id: id, title: title, image: '', parentId: parentId, userId: ''};
+        updatedPosts[oldPostIndex] = response.photo;
         this.photos = updatedPosts;
         this.photosUpdated.next([...this.photos] );
         this.router.navigate(['/']);

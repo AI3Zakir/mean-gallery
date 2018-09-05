@@ -58,7 +58,7 @@ exports.updatePhoto = (req, res, next) => {
     image = "/uploads/photos/" + req.file.filename;
   }
   const photo = new Photo({
-    _id: req.body.id,
+    _id: req.params.id,
     title: req.body.title,
     parentId: req.body.parentId,
     image: image,
@@ -66,7 +66,7 @@ exports.updatePhoto = (req, res, next) => {
   });
   Photo.findOneAndUpdate({_id: req.params.id, userId: req.userData.userId}, photo)
     .then((result) => {
-      if (result.n === 0) {
+      if (result === 0) {
         res.status(401).json({
           message: 'Not authorized.'
         })
