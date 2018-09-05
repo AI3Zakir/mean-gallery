@@ -5,10 +5,18 @@
       <input matInput type="text" formControlName="email" placeholder="Email"/>
       <mat-error *ngIf="form.get('email').invalid">Please enter valid Email</mat-error>
     </mat-form-field>
-    <mat-form-field>
-      <input matInput type="password" formControlName="password" placeholder="Password"/>
-      <mat-error *ngIf="form.get('password').invalid">Please enter valid Password</mat-error>
-    </mat-form-field>
+    <div formGroupName="passwords">
+      <mat-form-field>
+        <input matInput type="password" formControlName="password" placeholder="Password" [errorStateMatcher]="parentErrorStateMatcher"/>
+        <mat-error *ngIf="form.get('passwords').getError('mismatchedPasswords')">Passwords do not match</mat-error>
+        <mat-error *ngIf="form.get('passwords').get('password').invalid">Please enter valid Password</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm Password" [errorStateMatcher]="parentErrorStateMatcher"/>
+        <mat-error *ngIf="form.get('passwords').getError('mismatchedPasswords')">Passwords do not match</mat-error>
+        <mat-error *ngIf="form.get('passwords').get('confirmPassword').invalid">Please enter valid Password</mat-error>
+      </mat-form-field>
+    </div>
     <mat-form-field>
       <input matInput type="text" formControlName="firstName" placeholder="First Name"/>
       <mat-error *ngIf="form.get('firstName').invalid">Please enter valid First Name</mat-error>
