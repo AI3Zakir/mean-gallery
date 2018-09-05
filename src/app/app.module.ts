@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 import { HeaderComponent } from './header/header.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { UserInterceptor } from './user/user.interceptor';
+import { UploadPhotoDialogComponent } from './gallery/upload-photo-dialog/upload-photo-dialog.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { UserInterceptor } from './user/user.interceptor';
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: UserInterceptor, multi: true},
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [UploadPhotoDialogComponent]
 })
 export class AppModule {
 }

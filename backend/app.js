@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const usersRoutes = require('./routes/users');
+const photosRoutes = require('./routes/photos');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/users", usersRoutes);
+app.use("/api/photos", photosRoutes);
 
 
 
