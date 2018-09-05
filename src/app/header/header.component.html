@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+  <span><a routerLink="/">Gallery</a></span>
+  <span class="spacer"></span>
+  <ul>
+    <li *ngIf="!currentUser">
+      <a mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>
+    </li>
+    <li *ngIf="!currentUser">
+      <a mat-button routerLink="/sign-up" routerLinkActive="mat-accent">Signup</a>
+    </li>
+    <li *ngIf="currentUser">
+      <button mat-button (click)="onLogout()">Logout</button>
+    </li>
+    <li *ngIf="currentUser">
+      <button mat-button>| Logged in as {{ currentUser.email }}</button>
+    </li>
+  </ul>
+</mat-toolbar>
