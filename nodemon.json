@@ -1,0 +1,8 @@
+{
+  "env": {
+    "MONGO_ATLAS_USER": "user",
+    "MONGO_ATLAS_PW": "GVFnEQ8ZJBi7c9Jq",
+    "MONGO_ATLAS_DB": "gallery",
+    "JWT_KEY": "secret_this_should_be_longer"
+  }
+}
