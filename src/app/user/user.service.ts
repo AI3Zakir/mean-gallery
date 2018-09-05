@@ -3,7 +3,6 @@ import { User } from './model/user.model';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthData } from './auth-data.model';
 import { environment } from '../../environments/environment';
 
 const USER_API_URL = environment.apiUrl + '/api/users';

@@ -1,10 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { GalleryComponent } from './gallery.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    BrowserModule
   ],
-  declarations: []
+  declarations: [
+    GalleryComponent
+  ]
 })
 export class GalleryModule { }
