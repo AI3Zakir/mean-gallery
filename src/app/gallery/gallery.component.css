@@ -20,6 +20,10 @@ mat-card.photo-card {
   padding-bottom: 0;
 }
 
+mat-card.photo-card mat-card-content {
+  margin-bottom: -4px;
+}
+
 mat-card.photo-card mat-card-content p {
   position: absolute;
   top: 15px;
@@ -61,8 +65,4 @@ mat-card-content button.media-menu {
 
 mat-card-title {
   text-align: center;
-}
-
-.mat-card:not([class*=mat-elevation-z]) {
-  box-shadow: 0 3px 1px -12px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
 }

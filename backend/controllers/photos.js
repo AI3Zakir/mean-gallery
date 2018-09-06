@@ -4,6 +4,7 @@ exports.createPhoto = (req, res, next) => {
   const photo = new Photo({
     title: req.body.title,
     image: "/uploads/photos/" + req.file.filename,
+    thumbnail: "/uploads/thumbnails/" + req.file.thumbnail,
     parentId: req.body.parentId,
     userId: req.userData.userId
   });
@@ -56,14 +57,17 @@ exports.getPhoto = (req, res, next) => {
 };
 exports.updatePhoto = (req, res, next) => {
   let image = req.body.image;
+  let thumbnail = req.body.thumbnail;
   if (req.file) {
     image = "/uploads/photos/" + req.file.filename;
+    thumbnail = "/uploads/thumbnails/" + req.file.thumbnail;
   }
   const photo = new Photo({
     _id: req.params.id,
     title: req.body.title,
     parentId: req.body.parentId,
     image: image,
+    thumbnail: thumbnail,
     userId: req.userData.userId
   });
   Photo.findOneAndUpdate({_id: req.params.id, userId: req.userData.userId}, photo)

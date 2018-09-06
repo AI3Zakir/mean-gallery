@@ -45,7 +45,7 @@ export class UploadPhotoDialogComponent implements OnInit {
           'title': this.photo.title,
           'image': this.photo.image
         });
-        this.imagePreview = this.serverUrl + this.photo.image;
+        this.imagePreview = this.serverUrl + this.photo.thumbnail;
       });
     } else {
       this.mode = 'CREATE';
@@ -67,7 +67,7 @@ export class UploadPhotoDialogComponent implements OnInit {
     if (this.mode === 'CREATE') {
       this.galleryService.addPhoto(this.form.value.title, this.form.value.image, this.data.parentId);
     } else {
-      this.galleryService.updatePhoto(this.id, this.form.value.title, this.form.value.image, this.data.parentId);
+      this.galleryService.updatePhoto(this.id, this.form.value.title, this.form.value.image, this.photo.thumbnail, this.data.parentId);
     }
     this.form.reset();
   }

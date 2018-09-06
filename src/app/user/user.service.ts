@@ -121,7 +121,7 @@ export class UserService {
       const now = new Date();
       const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
       this.saveAuthData(this.token, expirationDate, this.user);
-      this.router.navigate(['/']);
+      this.router.navigate(['/gallery']);
     }
   }
 

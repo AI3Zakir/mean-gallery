@@ -8,6 +8,7 @@ import { Album } from './models/album.model';
 
 const PHOTOS_API_URL = environment.apiUrl + '/api/photos';
 const ALBUMS_API_URL = environment.apiUrl + '/api/albums';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +18,8 @@ export class GalleryService {
   private photosUpdated = new Subject<Photo[]>();
   private albumsUpdated = new Subject<Album[]>();
 
-  constructor(private httpClient: HttpClient, private router: Router) { }
+  constructor(private httpClient: HttpClient, private router: Router) {
+  }
 
   getPhotosObservable() {
     return this.photosUpdated.asObservable();
@@ -29,14 +31,14 @@ export class GalleryService {
     photoData.append('parentId', parentId);
     photoData.append('image', image, title);
 
-    this.httpClient.post<{message: string, photo: Photo}>(PHOTOS_API_URL, photoData)
+    this.httpClient.post<{ message: string, photo: Photo }>(PHOTOS_API_URL, photoData)
       .subscribe((addedPost) => {
         this.photos.push(addedPost.photo);
         this.photosUpdated.next([...this.photos]);
       });
   }
 
-  updatePhoto(id: string, title: string, image: File | string, parentId: string = '') {
+  updatePhoto(id: string, title: string, image: File | string, thumbnail: string, parentId: string = '') {
     let photoData: Photo | FormData;
     if (typeof(image) === 'object') {
       photoData = new FormData();
@@ -45,21 +47,21 @@ export class GalleryService {
       photoData.append('image', image, title);
       photoData.append('parentId', parentId);
     } else {
-      photoData = { _id: id, title: title, image: image, parentId: parentId, userId: null};
+      photoData = {_id: id, title: title, image: image, thumbnail: thumbnail, parentId: parentId, userId: null};
     }
-    this.httpClient.put<{message: string, photo: Photo}>(PHOTOS_API_URL + '/' + id, photoData)
+    this.httpClient.put<{ message: string, photo: Photo }>(PHOTOS_API_URL + '/' + id, photoData)
       .subscribe(response => {
         const updatedPosts = [...this.photos];
         const oldPostIndex = updatedPosts.findIndex(p => p._id === id);
         updatedPosts[oldPostIndex] = response.photo;
         this.photos = updatedPosts;
-        this.photosUpdated.next([...this.photos] );
+        this.photosUpdated.next([...this.photos]);
       });
   }
 
   getPhoto(id: string) {
     return this.httpClient
-      .get<{_id: string, title: string, image: string, parentId: string, userId: string}>(PHOTOS_API_URL + '/' + id);
+      .get<{ _id: string, title: string, image: string, thumbnail: string, parentId: string, userId: string }>(PHOTOS_API_URL + '/' + id);
   }
 
   deletePhoto(id: string) {
@@ -67,7 +69,7 @@ export class GalleryService {
   }
 
   getPhotos(parentId: string = '') {
-    this.httpClient.get<{ message: string, photos: any }>(PHOTOS_API_URL + '?parentId=' + parentId)
+    this.httpClient.get<{ message: string, photos: Photo[] }>(PHOTOS_API_URL + '?parentId=' + parentId)
       .subscribe(
         (response) => {
           this.photos = response.photos;
@@ -81,9 +83,9 @@ export class GalleryService {
   }
 
   addAlbum(title: string, parentId: string = '') {
-    const albumData = { title: title, parentId: parentId };
+    const albumData = {title: title, parentId: parentId};
 
-    this.httpClient.post<{message: string, album: Album}>(ALBUMS_API_URL, albumData)
+    this.httpClient.post<{ message: string, album: Album }>(ALBUMS_API_URL, albumData)
       .subscribe((addedPost) => {
         this.albums.push(addedPost.album);
         this.albumsUpdated.next([...this.albums]);
@@ -91,20 +93,20 @@ export class GalleryService {
   }
 
   updateAlbum(id: string, title: string, parentId: string = '') {
-    const albumData: Album = { _id: id, title: title, parentId: parentId, userId: null};
-    this.httpClient.put<{message: string, album: Album}>(ALBUMS_API_URL + '/' + id, albumData)
+    const albumData: Album = {_id: id, title: title, parentId: parentId, userId: null};
+    this.httpClient.put<{ message: string, album: Album }>(ALBUMS_API_URL + '/' + id, albumData)
       .subscribe(response => {
         const updatedPosts = [...this.albums];
         const oldPostIndex = updatedPosts.findIndex(p => p._id === id);
         updatedPosts[oldPostIndex] = response.album;
         this.albums = updatedPosts;
-        this.albumsUpdated.next([...this.albums] );
+        this.albumsUpdated.next([...this.albums]);
       });
   }
 
   getAlbum(id: string) {
     return this.httpClient
-      .get<{_id: string, title: string, parentId: string, userId: string}>(ALBUMS_API_URL + '/' + id);
+      .get<{ _id: string, title: string, parentId: string, userId: string }>(ALBUMS_API_URL + '/' + id);
   }
 
   deleteAlbum(id: string) {
