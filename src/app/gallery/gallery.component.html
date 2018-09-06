@@ -36,7 +36,7 @@
               <span>Delete</span></button>
           </mat-menu>
           <p class="mat-h2">{{ photo.title }}</p>
-          <img mat-card-image [src]="serverUrl + photo.thumbnail" [alt]="photo.title">
+          <img mat-card-image [src]="serverUrl + photo.thumbnail" [alt]="photo.title" (click)="onPhotoPreview(photo._id)">
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>

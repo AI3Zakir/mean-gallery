@@ -8,6 +8,7 @@ import { UploadPhotoDialogComponent } from './upload-photo-dialog/upload-photo-d
 import { HttpClientModule } from '@angular/common/http';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { SaveAlbumDialogComponent } from './save-album-dialog/save-album-dialog.component';
+import { ImagePreviewDialogComponent } from './image-preview-dialog/image-preview-dialog.component';
 
 @NgModule({
   imports: [
@@ -21,11 +22,13 @@ import { SaveAlbumDialogComponent } from './save-album-dialog/save-album-dialog.
     GalleryComponent,
     UploadPhotoDialogComponent,
     ConfirmationDialogComponent,
-    SaveAlbumDialogComponent
+    SaveAlbumDialogComponent,
+    ImagePreviewDialogComponent
   ],
   entryComponents: [
     UploadPhotoDialogComponent,
-    SaveAlbumDialogComponent
+    SaveAlbumDialogComponent,
+    ImagePreviewDialogComponent
   ]
 })
 export class GalleryModule { }

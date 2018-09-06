@@ -1,0 +1,16 @@
+mat-dialog-container {
+  box-shadow: none;
+}
+
+img {
+  max-width: 95%;
+  max-height: 95%;
+  display: block;
+  margin: auto;
+}
+
+button {
+  position: absolute;
+  top: 2%;
+  right: 2%;
+}

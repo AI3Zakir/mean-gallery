@@ -9,6 +9,7 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
 import { SaveAlbumDialogComponent } from './save-album-dialog/save-album-dialog.component';
 import { Album } from './models/album.model';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ImagePreviewDialogComponent } from './image-preview-dialog/image-preview-dialog.component';
 
 @Component({
   selector: 'app-gallery',
@@ -122,6 +123,23 @@ export class GalleryComponent implements OnInit {
           this.isLoading = false;
         });
       }
+    });
+  }
+
+  onPhotoPreview(id: string) {
+    const dialogRef = this.dialog.open(ImagePreviewDialogComponent, {
+      width: '90%',
+      height: '90%',
+      maxWidth: '90%',
+      maxHeight: '90%',
+      panelClass: 'transparent-dialog',
+      data: {
+        id: id,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
     });
   }
 }
