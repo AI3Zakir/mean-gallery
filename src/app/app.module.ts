@@ -11,11 +11,14 @@ import { HeaderComponent } from './header/header.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { UserInterceptor } from './user/user.interceptor';
 import { UploadPhotoDialogComponent } from './gallery/upload-photo-dialog/upload-photo-dialog.component';
+import { HomepageComponent } from './homepage/homepage.component';
+import { ConfirmationDialogComponent } from './gallery/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,
@@ -29,8 +32,7 @@ import { UploadPhotoDialogComponent } from './gallery/upload-photo-dialog/upload
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: UserInterceptor, multi: true},
   ],
-  bootstrap: [AppComponent],
-  entryComponents: [UploadPhotoDialogComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

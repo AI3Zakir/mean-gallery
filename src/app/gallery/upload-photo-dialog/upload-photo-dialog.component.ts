@@ -1,11 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { Photo } from '../models/photo.model';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { mimeType } from '../validators/mime-type.validator';
 import { GalleryService } from '../gallery.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-upload-photo-dialog',
@@ -15,13 +16,17 @@ import { GalleryService } from '../gallery.service';
 export class UploadPhotoDialogComponent implements OnInit {
   private mode = 'CREATE';
   private id: string;
+  private photosSubscriber: Subscription;
   photo: Photo;
   isLoading = false;
   form: FormGroup;
   imagePreview: string;
   serverUrl = environment.apiUrl;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public route: ActivatedRoute, private galleryService: GalleryService) {
+  constructor(
+    public dialogRef: MatDialogRef<UploadPhotoDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private galleryService: GalleryService) {
   }
 
   ngOnInit() {
@@ -46,6 +51,12 @@ export class UploadPhotoDialogComponent implements OnInit {
       this.mode = 'CREATE';
       this.id = null;
     }
+    this.photosSubscriber = this.galleryService.getPhotosObservable()
+      .subscribe(() => {
+        this.dialogRef.close();
+      }, () => {
+        this.dialogRef.close();
+      });
   }
 
   onPhotoSaved() {
@@ -70,5 +81,9 @@ export class UploadPhotoDialogComponent implements OnInit {
       this.imagePreview = reader.result;
     };
     reader.readAsDataURL(file);
+  }
+
+  onCloseDialog() {
+    this.dialogRef.close();
   }
 }

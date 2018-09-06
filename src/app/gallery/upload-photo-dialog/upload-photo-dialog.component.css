@@ -19,3 +19,12 @@ input[type="file"] {
 .image-preview img {
   height: 100%;
 }
+
+mat-divider {
+  margin: 1rem;
+}
+
+.button-row button,
+.button-row a {
+  margin-right: 8px;
+}

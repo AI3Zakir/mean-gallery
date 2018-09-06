@@ -7,9 +7,9 @@
         </mat-card-title>
       </mat-card-header>
       <img mat-card-image [src]="serverUrl + photo.image" [alt]="photo.title">
-      <mat-card-actions>
+      <mat-card-actions align="end">
         <button mat-stroked-button color="primary" (click)="openUploadPhotoDialog(photo._id)">Edit</button>
-        <button mat-stroked-button color="warn">Delete</button>
+        <button mat-stroked-button color="warn" (click)="openDeletePhotoDialog(photo._id)">Delete</button>
       </mat-card-actions>
     </mat-card>
   </mat-grid-tile>

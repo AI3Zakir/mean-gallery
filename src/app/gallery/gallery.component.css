@@ -17,5 +17,6 @@ mat-card-title {
   text-align: center;
 }
 mat-card-actions button {
-  margin: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
 }

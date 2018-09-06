@@ -5,6 +5,7 @@ import { Photo } from './models/photo.model';
 import { Subscription } from 'rxjs';
 import { GalleryService } from './gallery.service';
 import { environment } from '../../environments/environment';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-gallery',
@@ -38,6 +39,24 @@ export class GalleryComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+    });
+  }
+
+  openDeletePhotoDialog(id: string) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(confirm => {
+      this.isLoading = true;
+      if (confirm) {
+        console.log(confirm);
+        this.galleryService.deletePhoto(id).subscribe(() => {
+          this.galleryService.getPhotos();
+        }, () => {
+          this.isLoading = false;
+        });
+      }
     });
   }
 }
