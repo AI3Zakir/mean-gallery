@@ -3,27 +3,41 @@
   <mat-grid-list cols="4" rowHeight="300px">
     <mat-grid-tile *ngFor="let album of albums">
       <mat-card class="album-card">
-        <mat-card-header>
-          <mat-card-title>
+        <mat-card-content>
+          <a [href]="'gallery/' + album._id">
             <p class="mat-h2">Album: {{ album.title }}</p>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-actions align="center">
-          <button mat-flat-button color="primary" (click)="openSaveAlbumDialog(album._id)">Edit</button>
-          <button mat-flat-button color="warn" (click)="openDeleteAlbumDialog(album._id)">Delete</button>
-        </mat-card-actions>
+          </a>
+          <button mat-icon-button [matMenuTriggerFor]="menu" class="media-menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openSaveAlbumDialog(album._id)">
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span></button>
+            <button mat-menu-item (click)="openDeleteAlbumDialog(album._id)">
+              <mat-icon>delete</mat-icon>
+              <span>Delete</span></button>
+          </mat-menu>
+        </mat-card-content>
       </mat-card>
     </mat-grid-tile>
     <mat-grid-tile *ngFor="let photo of photos">
       <mat-card class="photo-card">
         <mat-card-content>
+          <button mat-icon-button class="media-menu" [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" class="media-menu">
+            <button mat-menu-item (click)="openUploadPhotoDialog(photo._id)">
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span></button>
+            <button mat-menu-item (click)="openDeletePhotoDialog(photo._id)">
+              <mat-icon>delete</mat-icon>
+              <span>Delete</span></button>
+          </mat-menu>
           <p class="mat-h2">{{ photo.title }}</p>
           <img mat-card-image [src]="serverUrl + photo.image" [alt]="photo.title">
         </mat-card-content>
-        <mat-card-actions align="center">
-          <button mat-flat-button color="primary" (click)="openUploadPhotoDialog(photo._id)">Edit</button>
-          <button mat-flat-button color="warn" (click)="openDeletePhotoDialog(photo._id)">Delete</button>
-        </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
   </mat-grid-list>
