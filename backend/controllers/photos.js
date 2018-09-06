@@ -21,7 +21,9 @@ exports.createPhoto = (req, res, next) => {
     });
 };
 exports.getPhotos = (req, res, next) => {
-  const photoQuery = Photo.find({userId: req.userData.userId});
+  const parentId = req.query.parentId;
+  let photoQuery = Photo.find({userId: req.userData.userId, parentId: parentId});
+
   photoQuery.find()
     .then((photos) => {
       res.status(200).json({

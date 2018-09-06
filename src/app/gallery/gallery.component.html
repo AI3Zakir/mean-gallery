@@ -1,49 +1,52 @@
-<mat-grid-list cols="3" rowHeight="400px">
-  <mat-grid-tile *ngFor="let album of albums">
-    <mat-card class="album-card">
-      <mat-card-header>
-        <mat-card-title>
-          <p class="mat-h2">Album: {{ album.title }}</p>
-        </mat-card-title>
-      </mat-card-header>
-      <mat-card-actions align="end">
-        <button mat-flat-button color="primary" (click)="openSaveAlbumDialog(album._id)">Edit</button>
-        <button mat-flat-button color="warn" (click)="openDeleteAlbumDialog(album._id)">Delete</button>
-      </mat-card-actions>
-    </mat-card>
-  </mat-grid-tile>
-  <mat-grid-tile *ngFor="let photo of photos">
-    <mat-card class="photo-card">
-      <mat-card-content>
-        <p class="mat-h2">{{ photo.title }}</p>
-        <img mat-card-image [src]="serverUrl + photo.image" [alt]="photo.title">
-      </mat-card-content>
-      <mat-card-actions align="end">
-        <button mat-flat-button color="primary" (click)="openUploadPhotoDialog(photo._id)">Edit</button>
-        <button mat-flat-button color="warn" (click)="openDeletePhotoDialog(photo._id)">Delete</button>
-      </mat-card-actions>
-    </mat-card>
-  </mat-grid-tile>
-</mat-grid-list>
-<button
-  mat-fab
-  class="gallery-fab"
-  color="primary"
-  matTooltip="Add New Album"
-  [matTooltipPosition]="'above'"
-  (click)="openSaveAlbumDialog()">
-  <mat-icon aria-label="Add New Album">
-    photo_album
-  </mat-icon>
-</button>
-<button
-  mat-fab
-  class="image-fab"
-  color="accent"
-  matTooltip="Upload Photo"
-  [matTooltipPosition]="'above'"
-  (click)="openUploadPhotoDialog()">
-  <mat-icon aria-label="Upload Photo">
-    photo
-  </mat-icon>
-</button>
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<div *ngIf="!isLoading">
+  <mat-grid-list cols="4" rowHeight="300px">
+    <mat-grid-tile *ngFor="let album of albums">
+      <mat-card class="album-card">
+        <mat-card-header>
+          <mat-card-title>
+            <p class="mat-h2">Album: {{ album.title }}</p>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-actions align="center">
+          <button mat-flat-button color="primary" (click)="openSaveAlbumDialog(album._id)">Edit</button>
+          <button mat-flat-button color="warn" (click)="openDeleteAlbumDialog(album._id)">Delete</button>
+        </mat-card-actions>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile *ngFor="let photo of photos">
+      <mat-card class="photo-card">
+        <mat-card-content>
+          <p class="mat-h2">{{ photo.title }}</p>
+          <img mat-card-image [src]="serverUrl + photo.image" [alt]="photo.title">
+        </mat-card-content>
+        <mat-card-actions align="center">
+          <button mat-flat-button color="primary" (click)="openUploadPhotoDialog(photo._id)">Edit</button>
+          <button mat-flat-button color="warn" (click)="openDeletePhotoDialog(photo._id)">Delete</button>
+        </mat-card-actions>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <button
+    mat-fab
+    class="gallery-fab"
+    color="primary"
+    matTooltip="Add New Album"
+    [matTooltipPosition]="'above'"
+    (click)="openSaveAlbumDialog()">
+    <mat-icon aria-label="Add New Album">
+      photo_album
+    </mat-icon>
+  </button>
+  <button
+    mat-fab
+    class="image-fab"
+    color="accent"
+    matTooltip="Upload Photo"
+    [matTooltipPosition]="'above'"
+    (click)="openUploadPhotoDialog()">
+    <mat-icon aria-label="Upload Photo">
+      photo
+    </mat-icon>
+  </button>
+</div>

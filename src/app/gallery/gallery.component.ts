@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { SaveAlbumDialogComponent } from './save-album-dialog/save-album-dialog.component';
 import { Album } from './models/album.model';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-gallery',
@@ -19,10 +20,15 @@ export class GalleryComponent implements OnInit {
   private albumsSubscriber: Subscription;
   photos: Photo[];
   albums: Album[];
+  id = '';
+  currentAlbum: Album;
   isLoading = false;
   serverUrl = environment.apiUrl;
 
-  constructor(public dialog: MatDialog, private galleryService: GalleryService) {
+  constructor(
+    public dialog: MatDialog,
+    private galleryService: GalleryService,
+    private route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -32,19 +38,36 @@ export class GalleryComponent implements OnInit {
         this.photos = photos;
         this.isLoading = false;
       });
-    this.albumsSubscriber= this.galleryService.getAlbumsObservable()
+    this.albumsSubscriber = this.galleryService.getAlbumsObservable()
       .subscribe((albums: Album[]) => {
         this.albums = albums;
         this.isLoading = false;
       });
-    this.galleryService.getPhotos();
-    this.galleryService.getAlbums();
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      if (paramMap.has('id')) {
+        this.id = paramMap.get('id');
+        this.galleryService.getAlbum(this.id)
+          .subscribe((album: Album) => {
+            this.currentAlbum = album;
+            this.galleryService.getPhotos(this.id);
+            this.galleryService.getAlbums(this.id);
+            this.isLoading = false;
+          });
+      } else {
+        this.galleryService.getPhotos();
+        this.galleryService.getAlbums();
+      }
+    });
+
   }
 
   openUploadPhotoDialog(id: string = null) {
     const dialogRef = this.dialog.open(UploadPhotoDialogComponent, {
       width: '500px',
-      data: {id: id}
+      data: {
+        id: id,
+        parentId: this.id
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -73,7 +96,10 @@ export class GalleryComponent implements OnInit {
   openSaveAlbumDialog(id: string = null) {
     const dialogRef = this.dialog.open(SaveAlbumDialogComponent, {
       width: '500px',
-      data: {id: id}
+      data: {
+        id: id,
+        parentId: this.id
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {

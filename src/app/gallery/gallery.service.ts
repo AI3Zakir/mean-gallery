@@ -66,8 +66,8 @@ export class GalleryService {
     return this.httpClient.delete(PHOTOS_API_URL + '/' + id);
   }
 
-  getPhotos() {
-    this.httpClient.get<{ message: string, photos: any }>(PHOTOS_API_URL)
+  getPhotos(parentId: string = '') {
+    this.httpClient.get<{ message: string, photos: any }>(PHOTOS_API_URL + '?parentId=' + parentId)
       .subscribe(
         (response) => {
           this.photos = response.photos;
@@ -111,8 +111,8 @@ export class GalleryService {
     return this.httpClient.delete(ALBUMS_API_URL + '/' + id);
   }
 
-  getAlbums() {
-    this.httpClient.get<{ message: string, albums: any }>(ALBUMS_API_URL)
+  getAlbums(parentId: string = '') {
+    this.httpClient.get<{ message: string, albums: any }>(ALBUMS_API_URL + '?parentId=' + parentId)
       .subscribe(
         (response) => {
           this.albums = response.albums;
