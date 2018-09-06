@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import {
   MatButtonModule,
-  MatCardModule, MatDialogModule, MatDividerModule,
+  MatCardModule, MatDatepickerModule, MatDialogModule, MatDividerModule,
   MatExpansionModule, MatGridListModule, MatIconModule,
-  MatInputModule, MatMenuModule, MatPaginatorModule,
+  MatInputModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule,
   MatProgressSpinnerModule,
   MatToolbarModule, MatTooltipModule
 } from '@angular/material';
@@ -22,7 +22,9 @@ import {
     MatTooltipModule,
     MatGridListModule,
     MatDividerModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   exports: [
     MatInputModule,
@@ -37,7 +39,9 @@ import {
     MatTooltipModule,
     MatGridListModule,
     MatDividerModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
 })
 export class AngularMaterialModule { }

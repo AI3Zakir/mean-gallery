@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  <span><a routerLink="/">Gallery</a></span>
+  <span><a [href]="!currentUser ? '/' : '/gallery'">Gallery</a></span>
   <span class="spacer"></span>
   <ul>
     <li *ngIf="!currentUser">

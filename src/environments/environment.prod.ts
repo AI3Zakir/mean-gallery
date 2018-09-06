@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:3000'
+  apiUrl: 'https://mean-gallery-ai3zakir.c9users.io'
 };

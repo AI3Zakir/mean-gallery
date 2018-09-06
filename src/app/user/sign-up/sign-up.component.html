@@ -26,7 +26,9 @@
       <mat-error *ngIf="form.get('lastName').invalid">Please enter valid Last Name</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="date" formControlName="birthDate" placeholder="Birth Date"/>
+      <input matInput [matDatepicker]="picker" formControlName="birthDate" placeholder="Birth Date" placeholder="Choose a date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
       <mat-error *ngIf="form.get('birthDate').invalid">Please enter valid Birth Date</mat-error>
     </mat-form-field>
     <div>

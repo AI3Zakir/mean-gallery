@@ -33,7 +33,7 @@ mat-card.photo-card mat-card-content p {
 
 mat-card.album-card {
   min-width: 70%;
-  background-color: #bdbdbd;
+  background-color: #eeeeee;
   padding-top: 0;
   padding-bottom: 0;
 }
