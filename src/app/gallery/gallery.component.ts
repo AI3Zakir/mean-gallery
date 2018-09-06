@@ -5,7 +5,9 @@ import { Photo } from './models/photo.model';
 import { Subscription } from 'rxjs';
 import { GalleryService } from './gallery.service';
 import { environment } from '../../environments/environment';
-import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { SaveAlbumDialogComponent } from './save-album-dialog/save-album-dialog.component';
+import { Album } from './models/album.model';
 
 @Component({
   selector: 'app-gallery',
@@ -14,7 +16,9 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
 })
 export class GalleryComponent implements OnInit {
   private photosSubscriber: Subscription;
+  private albumsSubscriber: Subscription;
   photos: Photo[];
+  albums: Album[];
   isLoading = false;
   serverUrl = environment.apiUrl;
 
@@ -28,7 +32,13 @@ export class GalleryComponent implements OnInit {
         this.photos = photos;
         this.isLoading = false;
       });
+    this.albumsSubscriber= this.galleryService.getAlbumsObservable()
+      .subscribe((albums: Album[]) => {
+        this.albums = albums;
+        this.isLoading = false;
+      });
     this.galleryService.getPhotos();
+    this.galleryService.getAlbums();
   }
 
   openUploadPhotoDialog(id: string = null) {
@@ -44,7 +54,7 @@ export class GalleryComponent implements OnInit {
 
   openDeletePhotoDialog(id: string) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '500px'
+      width: '300px'
     });
 
     dialogRef.afterClosed().subscribe(confirm => {
@@ -53,6 +63,35 @@ export class GalleryComponent implements OnInit {
         console.log(confirm);
         this.galleryService.deletePhoto(id).subscribe(() => {
           this.galleryService.getPhotos();
+        }, () => {
+          this.isLoading = false;
+        });
+      }
+    });
+  }
+
+  openSaveAlbumDialog(id: string = null) {
+    const dialogRef = this.dialog.open(SaveAlbumDialogComponent, {
+      width: '500px',
+      data: {id: id}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  openDeleteAlbumDialog(id: string) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '300px'
+    });
+
+    dialogRef.afterClosed().subscribe(confirm => {
+      this.isLoading = true;
+      if (confirm) {
+        console.log(confirm);
+        this.galleryService.deleteAlbum(id).subscribe(() => {
+          this.galleryService.getAlbums();
         }, () => {
           this.isLoading = false;
         });

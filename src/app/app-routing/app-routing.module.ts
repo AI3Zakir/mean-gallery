@@ -10,7 +10,8 @@ const routes: Routes = [
   { path: '', component: HomepageComponent },
   { path: 'sign-up', component: SignUpComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'gallery', component: GalleryComponent, canActivate: [UserGuard] }
+  { path: 'gallery', component: GalleryComponent, canActivate: [UserGuard] },
+  { path: 'gallery/:id', component: GalleryComponent, canActivate: [UserGuard] }
 ];
 
 @NgModule({

@@ -12,7 +12,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { UserInterceptor } from './user/user.interceptor';
 import { UploadPhotoDialogComponent } from './gallery/upload-photo-dialog/upload-photo-dialog.component';
 import { HomepageComponent } from './homepage/homepage.component';
-import { ConfirmationDialogComponent } from './gallery/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +32,10 @@ import { ConfirmationDialogComponent } from './gallery/confirmation-dialog/confi
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: UserInterceptor, multi: true},
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    ConfirmationDialogComponent
+  ]
 })
 export class AppModule {
 }

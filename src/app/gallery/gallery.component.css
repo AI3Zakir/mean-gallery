@@ -13,9 +13,25 @@
 .photo-card{
   margin: 1rem;
 }
+
+mat-card.photo-card {
+  background-color: #bdbdbd;
+  padding-top: 0;
+}
+
+mat-card.photo-card mat-card-content p {
+  position: absolute;
+  margin-top: 15px;
+}
+
 mat-card-title {
   text-align: center;
 }
+
+mat-card-actions {
+  margin-top: -21px;
+}
+
 mat-card-actions button {
   margin-left: 5px;
   margin-right: 5px;

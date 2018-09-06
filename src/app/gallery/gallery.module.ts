@@ -6,7 +6,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
 import { UploadPhotoDialogComponent } from './upload-photo-dialog/upload-photo-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { SaveAlbumDialogComponent } from './save-album-dialog/save-album-dialog.component';
 
 @NgModule({
   imports: [
@@ -19,11 +20,12 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
   declarations: [
     GalleryComponent,
     UploadPhotoDialogComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    SaveAlbumDialogComponent
   ],
   entryComponents: [
     UploadPhotoDialogComponent,
-    ConfirmationDialogComponent
+    SaveAlbumDialogComponent
   ]
 })
 export class GalleryModule { }

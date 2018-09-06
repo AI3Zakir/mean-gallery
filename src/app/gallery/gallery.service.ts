@@ -4,15 +4,18 @@ import { HttpClient } from '@angular/common/http';
 import { Photo } from './models/photo.model';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { Album } from './models/album.model';
 
 const PHOTOS_API_URL = environment.apiUrl + '/api/photos';
-const ALBUMS_API_URL = environment.apiUrl + '/api/photos';
+const ALBUMS_API_URL = environment.apiUrl + '/api/albums';
 @Injectable({
   providedIn: 'root'
 })
 export class GalleryService {
   private photos: Photo[] = [];
+  private albums: Album[] = [];
   private photosUpdated = new Subject<Photo[]>();
+  private albumsUpdated = new Subject<Album[]>();
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
@@ -30,7 +33,6 @@ export class GalleryService {
       .subscribe((addedPost) => {
         this.photos.push(addedPost.photo);
         this.photosUpdated.next([...this.photos]);
-        this.router.navigate(['/']);
       });
   }
 
@@ -52,7 +54,6 @@ export class GalleryService {
         updatedPosts[oldPostIndex] = response.photo;
         this.photos = updatedPosts;
         this.photosUpdated.next([...this.photos] );
-        this.router.navigate(['/']);
       });
   }
 
@@ -71,6 +72,51 @@ export class GalleryService {
         (response) => {
           this.photos = response.photos;
           this.photosUpdated.next([...this.photos]);
+        }
+      );
+  }
+
+  getAlbumsObservable() {
+    return this.albumsUpdated.asObservable();
+  }
+
+  addAlbum(title: string, parentId: string = '') {
+    const albumData = { title: title, parentId: parentId };
+
+    this.httpClient.post<{message: string, album: Album}>(ALBUMS_API_URL, albumData)
+      .subscribe((addedPost) => {
+        this.albums.push(addedPost.album);
+        this.albumsUpdated.next([...this.albums]);
+      });
+  }
+
+  updateAlbum(id: string, title: string, parentId: string = '') {
+    const albumData: Album = { _id: id, title: title, parentId: parentId, userId: null};
+    this.httpClient.put<{message: string, album: Album}>(ALBUMS_API_URL + '/' + id, albumData)
+      .subscribe(response => {
+        const updatedPosts = [...this.albums];
+        const oldPostIndex = updatedPosts.findIndex(p => p._id === id);
+        updatedPosts[oldPostIndex] = response.album;
+        this.albums = updatedPosts;
+        this.albumsUpdated.next([...this.albums] );
+      });
+  }
+
+  getAlbum(id: string) {
+    return this.httpClient
+      .get<{_id: string, title: string, parentId: string, userId: string}>(ALBUMS_API_URL + '/' + id);
+  }
+
+  deleteAlbum(id: string) {
+    return this.httpClient.delete(ALBUMS_API_URL + '/' + id);
+  }
+
+  getAlbums() {
+    this.httpClient.get<{ message: string, albums: any }>(ALBUMS_API_URL)
+      .subscribe(
+        (response) => {
+          this.albums = response.albums;
+          this.albumsUpdated.next([...this.albums]);
         }
       );
   }
