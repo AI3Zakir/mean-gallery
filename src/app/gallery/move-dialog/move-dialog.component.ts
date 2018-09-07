@@ -4,6 +4,7 @@ import { GalleryService } from '../gallery.service';
 import { Album } from '../models/album.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Photo } from '../models/photo.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-move-dialog',
@@ -17,6 +18,8 @@ export class MoveDialogComponent implements OnInit {
   form: FormGroup;
   currentMedia: any;
   mediaType: string;
+  private albumsSubscriber: Subscription;
+  private photosSubscriber: Subscription;
 
   constructor(
     public dialogRef: MatDialogRef<MoveDialogComponent>,
@@ -40,6 +43,18 @@ export class MoveDialogComponent implements OnInit {
         );
         this.albums = response.albums.filter((el) => el._id !== this.currentMedia._id);
         this.isLoading = false;
+      });
+    this.albumsSubscriber = this.galleryService.getAlbumsObservable()
+      .subscribe(() => {
+        this.dialogRef.close();
+      }, () => {
+        this.dialogRef.close();
+      });
+    this.photosSubscriber = this.galleryService.getPhotosObservable()
+      .subscribe(() => {
+        this.dialogRef.close();
+      }, () => {
+        this.dialogRef.close();
       });
   }
 

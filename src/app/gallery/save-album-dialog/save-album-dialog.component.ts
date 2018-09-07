@@ -6,7 +6,6 @@ import { environment } from '../../../environments/environment';
 import { Album } from '../models/album.model';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { GalleryService } from '../gallery.service';
-import { mimeType } from '../validators/mime-type.validator';
 
 @Component({
   selector: 'app-save-album-dialog',

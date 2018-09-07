@@ -1,7 +1,4 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
-<span *ngFor="let album of albums">
-  {{album.title}}
-</span>
 <form [formGroup]="form" (submit)="onChangeAlbum()" *ngIf="!isLoading">
   <mat-form-field>
     <mat-select formControlName="album" placeholder="Change album">
