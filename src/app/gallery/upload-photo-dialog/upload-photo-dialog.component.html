@@ -14,6 +14,6 @@
   <mat-divider></mat-divider>
   <div class="button-row">
     <button mat-raised-button color="primary" type="submit">Save Photo</button>
-    <button mat-raised-button color="accent" (click)="onCloseDialog()" class="layout-align-end-star">Cancel</button>
+    <button mat-raised-button color="accent" (click)="onCloseDialog(); $event.preventDefault()" class="layout-align-end-star">Cancel</button>
   </div>
 </form>

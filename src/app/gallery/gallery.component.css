@@ -10,6 +10,12 @@
   position: fixed !important;
 }
 
+.back-fab {
+  left: 20px;
+  top: 80px;
+  position: fixed !important;
+}
+
 .photo-card {
   margin: 1rem;
 }

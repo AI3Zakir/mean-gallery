@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { Photo } from '../models/photo.model';
@@ -7,6 +7,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { mimeType } from '../validators/mime-type.validator';
 import { GalleryService } from '../gallery.service';
 import { Subscription } from 'rxjs';
+import { ErrorComponent } from '../../error/error.component';
 
 @Component({
   selector: 'app-upload-photo-dialog',
@@ -26,7 +27,8 @@ export class UploadPhotoDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<UploadPhotoDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private galleryService: GalleryService) {
+    private galleryService: GalleryService,
+    private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -61,8 +63,16 @@ export class UploadPhotoDialogComponent implements OnInit {
 
   onPhotoSaved() {
     if (this.form.invalid) {
-      return;
+      if (this.form.get('image').invalid) {
+        this.dialog.open(ErrorComponent, {
+          data: {
+            message: 'Please upload Image'
+          }
+        });
+        return;
+      }
     }
+
     this.isLoading = true;
     if (this.mode === 'CREATE') {
       this.galleryService.addPhoto(this.form.value.title, this.form.value.image, this.data.parentId);

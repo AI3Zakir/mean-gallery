@@ -41,7 +41,7 @@ export class MoveDialogComponent implements OnInit {
             'album': this.currentMedia.parentId
           }
         );
-        this.albums = response.albums.filter((el) => el._id !== this.currentMedia._id);
+        this.albums = this.unflattenAlbum(response.albums);
         this.isLoading = false;
       });
     this.albumsSubscriber = this.galleryService.getAlbumsObservable()
@@ -78,5 +78,30 @@ export class MoveDialogComponent implements OnInit {
         this.form.value.album);
     }
     this.form.reset();
+  }
+
+  private unflattenAlbum(albums: Album[]) {
+    const tree = [],
+      mappedArr = {};
+    let arrElem,
+      mappedElem;
+
+    for (let i = 0, len = albums.length; i < len; i++) {
+      arrElem = albums[i];
+      mappedArr[arrElem._id] = arrElem;
+      mappedArr[arrElem._id]['children'] = [];
+    }
+
+    for (const id in mappedArr) {
+      if (mappedArr.hasOwnProperty(id)) {
+        mappedElem = mappedArr[id];
+        if (mappedElem.parentId) {
+          mappedArr[mappedElem['parentId']]['children'].push(mappedElem);
+        } else {
+          tree.push(mappedElem);
+        }
+      }
+    }
+    return tree;
   }
 }

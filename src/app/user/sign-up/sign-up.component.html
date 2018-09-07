@@ -7,8 +7,7 @@
     </mat-form-field>
     <div formGroupName="passwords">
       <mat-form-field>
-        <input matInput type="password" formControlName="password" placeholder="Password" [errorStateMatcher]="parentErrorStateMatcher"/>
-        <mat-error *ngIf="form.get('passwords').getError('mismatchedPasswords')">Passwords do not match</mat-error>
+        <input matInput type="password" formControlName="password" placeholder="Password"/>
         <mat-error *ngIf="form.get('passwords').get('password').invalid">Please enter valid Password</mat-error>
       </mat-form-field>
       <mat-form-field>

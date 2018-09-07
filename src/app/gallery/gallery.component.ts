@@ -11,6 +11,7 @@ import { Album } from './models/album.model';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ImagePreviewDialogComponent } from './image-preview-dialog/image-preview-dialog.component';
 import { MoveDialogComponent } from './move-dialog/move-dialog.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-gallery',
@@ -30,7 +31,8 @@ export class GalleryComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private galleryService: GalleryService,
-    private route: ActivatedRoute) {
+    public route: ActivatedRoute,
+    public location: Location) {
   }
 
   ngOnInit() {
@@ -157,5 +159,9 @@ export class GalleryComponent implements OnInit {
         }
       });
     });
+  }
+
+  onBackClicked() {
+    this.location.back();
   }
 }

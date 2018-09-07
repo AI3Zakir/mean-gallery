@@ -1,5 +1,17 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 <div *ngIf="!isLoading">
+  <button
+    *ngIf="route.url.value[1]"
+    mat-fab
+    class="back-fab"
+    color="accent"
+    matTooltip="Back"
+    [matTooltipPosition]="'above'"
+    (click)="onBackClicked()">
+    <mat-icon aria-label="Back button">
+      chevron_left
+    </mat-icon>
+  </button>
   <mat-grid-list cols="4" rowHeight="300px">
     <mat-grid-tile *ngFor="let album of albums">
       <mat-card class="album-card">
