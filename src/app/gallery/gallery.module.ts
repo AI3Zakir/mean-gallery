@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { SaveAlbumDialogComponent } from './save-album-dialog/save-album-dialog.component';
 import { ImagePreviewDialogComponent } from './image-preview-dialog/image-preview-dialog.component';
+import { ErrorComponent } from '../error/error.component';
 
 @NgModule({
   imports: [

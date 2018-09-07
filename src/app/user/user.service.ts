@@ -5,6 +5,9 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
+export const MAX_LOGIN_ATTEMPTS = 10;
+// in miliseconds minutes/seconds/miliseconds
+export const BLOCK_TIME = 5 * 60 * 1000 ;
 const USER_API_URL = environment.apiUrl + '/api/users';
 
 export interface RegisterData {
@@ -30,9 +33,14 @@ export class UserService {
   private user: User;
   private authStatusListener = new Subject<boolean>();
   private currentUserListener = new Subject<User>();
+  private loginCounterListener = new Subject<number>();
   private tokenTimer: any;
+  loginCounter = 0;
 
   constructor(private httpClinet: HttpClient, private router: Router) {
+    if (localStorage.getItem('loginAttempts') !== null) {
+      this.loginCounter = +localStorage.getItem('loginAttempts');
+    }
   }
 
   getToken() {
@@ -45,6 +53,10 @@ export class UserService {
 
   getCurrentUserListener() {
     return this.currentUserListener.asObservable();
+  }
+
+  getLoginCounterListener() {
+    return this.loginCounterListener.asObservable();
   }
 
   getAuthenticationStatus() {
@@ -76,8 +88,10 @@ export class UserService {
     const authData: AuthData = {email: email, password: password};
     this.httpClinet.post<{ token: string, expiresIn: number, user: User }>(USER_API_URL + '/login', authData)
       .subscribe((response) => {
+        this.clearLoginCounter();
         this.authenticate(response);
       }, (error) => {
+        this.failedLogin();
         this.authStatusListener.next(false);
       });
   }
@@ -107,6 +121,10 @@ export class UserService {
       this.authStatusListener.next(true);
       this.setAuthTimer(expiresIn / 1000);
     }
+  }
+
+  getBlockedUntil() {
+    return localStorage.getItem('block');
   }
 
   private authenticate(response) {
@@ -156,5 +174,29 @@ export class UserService {
       expirationDate: new Date(expirationDate),
       user: JSON.parse(userData)
     };
+  }
+
+  getLoginCounter() {
+    return this.loginCounter;
+  }
+
+  private failedLogin() {
+    this.loginCounter += 1;
+    this.loginCounterListener.next(this.loginCounter);
+    localStorage.setItem('loginAttempts', this.loginCounter.toString());
+    if (this.loginCounter >= MAX_LOGIN_ATTEMPTS - 1) {
+      const blockedUntil = new Date().getTime() + BLOCK_TIME;
+      localStorage.setItem('block', blockedUntil.toString());
+      setTimeout(() => {
+        this.loginCounter = 0;
+        this.loginCounterListener.next(this.loginCounter);
+        localStorage.removeItem('block');
+      }, BLOCK_TIME);
+    }
+  }
+
+  private clearLoginCounter() {
+    localStorage.removeItem('loginAttempts');
+    this.loginCounter = 0;
   }
 }

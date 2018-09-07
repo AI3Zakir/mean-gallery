@@ -10,15 +10,17 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 import { HeaderComponent } from './header/header.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { UserInterceptor } from './user/user.interceptor';
-import { UploadPhotoDialogComponent } from './gallery/upload-photo-dialog/upload-photo-dialog.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { ErrorInterceptor } from './error.interceptor';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    HomepageComponent
+    HomepageComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -31,10 +33,12 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: UserInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    ErrorComponent
   ]
 })
 export class AppModule {

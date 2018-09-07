@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { UserService } from '../user.service';
-import { ParentErrorStateMatcher } from '../sign-up/sign-up.component';
+import { MAX_LOGIN_ATTEMPTS, UserService } from '../user.service';
+import { ErrorComponent } from '../../error/error.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-login',
@@ -12,12 +13,18 @@ import { ParentErrorStateMatcher } from '../sign-up/sign-up.component';
 export class LoginComponent implements OnInit, OnDestroy {
   isLoading = false;
   form: FormGroup;
+  loginCounter = 0;
+  maxLoginAttempts = MAX_LOGIN_ATTEMPTS;
   private authStatusSubscription: Subscription;
+  private loginCounterSubscription: Subscription;
 
-  constructor(private userService: UserService) {
+  constructor(
+    private userService: UserService,
+    private dialog: MatDialog) {
   }
 
   ngOnInit() {
+    this.loginCounter = this.userService.getLoginCounter();
     this.form = new FormGroup({
       'email': new FormControl(null, {validators: [Validators.required, Validators.email]}),
       'password': new FormControl(null, {validators: [Validators.required]}),
@@ -30,12 +37,31 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     );
+    this.loginCounterSubscription = this.userService.getLoginCounterListener()
+      .subscribe((count) => {
+        this.loginCounter = count;
+      });
   }
 
   onLogin() {
     if (this.form.invalid) {
       return;
     }
+
+    if (this.loginCounter >= MAX_LOGIN_ATTEMPTS - 1) {
+      const blockTime = new Date(+this.userService.getBlockedUntil());
+      const formattedDate = blockTime.getHours() + ':' + blockTime.getMinutes() + ':' + blockTime.getSeconds() +
+        ' ' + blockTime.getDate() + '/' + (blockTime.getMonth() + 1) + '/' + blockTime.getFullYear();
+      this.dialog.open(ErrorComponent, {
+        data: {
+          message: 'Exceeded maximum number of login attempts.' +
+            'You will be unlocked at:' + formattedDate
+        }
+      });
+
+      return;
+    }
+
     this.isLoading = true;
     this.userService.login(
       this.form.value.email,

@@ -46,7 +46,7 @@ exports.loginUser = (req, res, next) => {
     .then(user => {
       if (!user) {
         return res.status(401).json({
-          message: "Auth failed"
+          message: "Authentication failed"
         });
       }
       fetchedUser = user;
@@ -55,7 +55,7 @@ exports.loginUser = (req, res, next) => {
     .then((result) => {
       if (!result) {
         return res.status(401).json({
-          message: "Auth failed"
+          message: "Authentication failed"
         });
       }
 
@@ -82,7 +82,7 @@ exports.loginUser = (req, res, next) => {
     })
     .catch((error) => {
       return res.status(401).json({
-        message: "Auth failed"
+        message: "Authentication failed"
       });
     });
 };
