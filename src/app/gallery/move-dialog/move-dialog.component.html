@@ -1,0 +1,19 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<span *ngFor="let album of albums">
+  {{album.title}}
+</span>
+<form [formGroup]="form" (submit)="onChangeAlbum()" *ngIf="!isLoading">
+  <mat-form-field>
+    <mat-select formControlName="album" placeholder="Change album">
+      <mat-option [value]="">(No Album)</mat-option>
+      <mat-option *ngFor="let album of albums" [value]="album._id">
+        {{album.title}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-divider></mat-divider>
+  <div class="button-row">
+    <button mat-raised-button color="primary" type="submit">Change Album</button>
+    <button mat-raised-button color="accent" (click)="onCloseDialog()" class="layout-align-end-star">Cancel</button>
+  </div>
+</form>

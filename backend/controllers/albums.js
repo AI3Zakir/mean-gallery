@@ -23,6 +23,9 @@ exports.createAlbum = (req, res, next) => {
 exports.getAlbums = (req, res, next) => {
   const parentId = req.query.parentId;
   let albumQuery = Album.find({userId: req.userData.userId, parentId: parentId});
+  if (parentId === undefined) {
+    albumQuery = Album.find({userId: req.userData.userId});
+  }
   albumQuery.find()
     .then((albums) => {
       res.status(200).json({

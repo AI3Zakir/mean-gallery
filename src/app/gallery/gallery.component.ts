@@ -10,6 +10,7 @@ import { SaveAlbumDialogComponent } from './save-album-dialog/save-album-dialog.
 import { Album } from './models/album.model';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ImagePreviewDialogComponent } from './image-preview-dialog/image-preview-dialog.component';
+import { MoveDialogComponent } from './move-dialog/move-dialog.component';
 
 @Component({
   selector: 'app-gallery',
@@ -140,6 +141,21 @@ export class GalleryComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+    });
+  }
+
+  openChangeDialog(id: string, type: string) {
+    const mediaGetter = (type === 'album') ?
+      this.galleryService.getAlbum(id) :
+      this.galleryService.getPhoto(id);
+    mediaGetter.subscribe((media) => {
+      const dialogRef = this.dialog.open(MoveDialogComponent, {
+        width: '300px',
+        data: {
+          media: media,
+          type: type
+        }
+      });
     });
   }
 }

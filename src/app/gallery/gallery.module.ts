@@ -10,6 +10,7 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
 import { SaveAlbumDialogComponent } from './save-album-dialog/save-album-dialog.component';
 import { ImagePreviewDialogComponent } from './image-preview-dialog/image-preview-dialog.component';
 import { ErrorComponent } from '../error/error.component';
+import { MoveDialogComponent } from './move-dialog/move-dialog.component';
 
 @NgModule({
   imports: [
@@ -24,12 +25,14 @@ import { ErrorComponent } from '../error/error.component';
     UploadPhotoDialogComponent,
     ConfirmationDialogComponent,
     SaveAlbumDialogComponent,
-    ImagePreviewDialogComponent
+    ImagePreviewDialogComponent,
+    MoveDialogComponent
   ],
   entryComponents: [
     UploadPhotoDialogComponent,
     SaveAlbumDialogComponent,
-    ImagePreviewDialogComponent
+    ImagePreviewDialogComponent,
+    MoveDialogComponent
   ]
 })
 export class GalleryModule { }

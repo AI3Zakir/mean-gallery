@@ -122,4 +122,8 @@ export class GalleryService {
         }
       );
   }
+
+  getAllAlbums() {
+    return this.httpClient.get<{ message: string, albums: any }>(ALBUMS_API_URL);
+  }
 }

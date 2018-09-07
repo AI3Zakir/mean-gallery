@@ -3,8 +3,8 @@ import {
   MatButtonModule,
   MatCardModule, MatDatepickerModule, MatDialogModule, MatDividerModule,
   MatExpansionModule, MatGridListModule, MatIconModule,
-  MatInputModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule,
-  MatProgressSpinnerModule,
+  MatInputModule, MatMenuModule, MatNativeDateModule, MatOptionModule, MatPaginatorModule,
+  MatProgressSpinnerModule, MatSelectModule,
   MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 
@@ -24,7 +24,9 @@ import {
     MatDividerModule,
     MatMenuModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSelectModule,
+    MatOptionModule
   ],
   exports: [
     MatInputModule,
@@ -41,7 +43,9 @@ import {
     MatDividerModule,
     MatMenuModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSelectModule,
+    MatOptionModule
   ],
 })
 export class AngularMaterialModule { }
