@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 export class MoveDialogComponent implements OnInit {
 
   isLoading = false;
-  albums: Album[];
+  albums: any;
   form: FormGroup;
   currentMedia: any;
   mediaType: string;
@@ -41,7 +41,15 @@ export class MoveDialogComponent implements OnInit {
             'album': this.currentMedia.parentId
           }
         );
-        this.albums = this.unflattenAlbum(response.albums);
+        // make proper ordering
+        this.albums = this.unFlattenAlbum(response.albums);
+        // flatten array back
+        this.albums = this.flattenAlbum({
+          _id: '',
+          title: '(No Album)',
+          children: this.albums,
+          lvl: 0
+        }, 'children');
         this.isLoading = false;
       });
     this.albumsSubscriber = this.galleryService.getAlbumsObservable()
@@ -80,28 +88,44 @@ export class MoveDialogComponent implements OnInit {
     this.form.reset();
   }
 
-  private unflattenAlbum(albums: Album[]) {
-    const tree = [],
-      mappedArr = {};
-    let arrElem,
-      mappedElem;
+  counter(i: number) {
+    return new Array(i);
+  }
 
-    for (let i = 0, len = albums.length; i < len; i++) {
-      arrElem = albums[i];
-      mappedArr[arrElem._id] = arrElem;
-      mappedArr[arrElem._id]['children'] = [];
-    }
+  private unFlattenAlbum(array, parent = null,  lvl = 0) {
+    const self = this;
 
-    for (const id in mappedArr) {
-      if (mappedArr.hasOwnProperty(id)) {
-        mappedElem = mappedArr[id];
-        if (mappedElem.parentId) {
-          mappedArr[mappedElem['parentId']]['children'].push(mappedElem);
-        } else {
-          tree.push(mappedElem);
-        }
+    let tree = [];
+    parent = parent ? parent : { _id: '' };
+
+    const children = array.filter(function(child) { return child.parentId === parent._id; });
+
+    if (children.length) {
+      if (parent._id === '') {
+        tree = children;
+      } else {
+        parent['children'] = children;
       }
+      children.forEach(function(child) {
+        child['lvl'] = lvl;
+        self.unFlattenAlbum( array, child, lvl + 1 );
+      } );
     }
+
     return tree;
+  }
+
+  private flattenAlbum(root, key) {
+    const flatten = [Object.assign({}, root)];
+    delete flatten[0][key];
+
+    if (root[key] && root[key].length > 0) {
+      return flatten.concat(root[key]
+        .map((child) => this.flattenAlbum(child, key))
+        .reduce((a, b) => a.concat(b), [])
+      );
+    }
+
+    return flatten;
   }
 }
