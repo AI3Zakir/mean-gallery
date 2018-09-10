@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Users = require('../models/user');
+const Bans = require('../models/ban');
 
 exports.createUser = (req, res, next) => {
   const user = new Users({
@@ -42,6 +43,8 @@ exports.createUser = (req, res, next) => {
 
 exports.loginUser = (req, res, next) => {
   let fetchedUser;
+  let formattedDate;
+  let ban;
   Users.findOne({email: req.body.email})
     .then(user => {
       if (!user) {
@@ -49,10 +52,27 @@ exports.loginUser = (req, res, next) => {
           message: "Authentication failed"
         });
       }
-      fetchedUser = user;
-      return user.comparePassword(req.body.password)
+      return Bans.findOne({userId: user._id}, {}, {sort: {_id: -1}})
+        .then((bansResult) => {
+          console.log(bansResult.expiresIn.getTime() > new Date().getTime());
+          if (bansResult.expiresIn.getTime() > new Date().getTime()) {
+            formattedDate = bansResult.expiresIn.getHours() + ':' + bansResult.expiresIn.getMinutes() + ':' + bansResult.expiresIn.getSeconds() +
+              ' ' + bansResult.expiresIn.getDate() + '/' + (bansResult.expiresIn.getMonth() + 1) + '/' + bansResult.expiresIn.getFullYear();
+            ban = bansResult;
+          }
+          fetchedUser = user;
+          return user.comparePassword(req.body.password)
+        });
+
     })
     .then((result) => {
+      if (formattedDate) {
+        return res.status(401).json({
+          message: 'Exceeded maximum number of login attempts.' +
+            'You will be unlocked at:' + formattedDate,
+          expiresIn: ban.expiresIn
+        });
+      }
       if (!result) {
         return res.status(401).json({
           message: "Authentication failed"
@@ -86,3 +106,26 @@ exports.loginUser = (req, res, next) => {
       });
     });
 };
+
+exports.banUser = ((req, res, next) => {
+  Users.findOne({email: req.body.email})
+    .then(user => {
+      if (!user) {
+        return res.status(401).json({
+          message: "Authenticadddtion failed"
+        });
+      }
+
+      const expiresIn = new Date();
+
+      const ban = new Bans({
+        userId: user._id,
+        expiresIn: expiresIn.setHours(expiresIn.getHours() + 1)
+      });
+      ban.save().then(result => {
+        res.status(201).json({
+          message: 'User Blocked'
+        });
+      });
+    })
+});

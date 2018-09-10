@@ -35,7 +35,7 @@ export class UserService {
   private currentUserListener = new Subject<User>();
   private loginCounterListener = new Subject<number>();
   private tokenTimer: any;
-  loginCounter = 0;
+  loginCounter = 1;
 
   constructor(private httpClinet: HttpClient, private router: Router) {
     if (localStorage.getItem('loginAttempts') !== null) {
@@ -91,7 +91,13 @@ export class UserService {
         this.clearLoginCounter();
         this.authenticate(response);
       }, (error) => {
-        this.failedLogin();
+        if (error.error.expiresIn) {
+          this.loginCounter = 9;
+          this.loginCounterListener.next(this.loginCounter);
+          this.blockUser(new Date(error.error.expiresIn).getTime());
+        } else {
+          this.failedLogin(email);
+        }
         this.authStatusListener.next(false);
       });
   }
@@ -180,23 +186,31 @@ export class UserService {
     return this.loginCounter;
   }
 
-  private failedLogin() {
+  private failedLogin(email: string = null) {
     this.loginCounter += 1;
     this.loginCounterListener.next(this.loginCounter);
     localStorage.setItem('loginAttempts', this.loginCounter.toString());
     if (this.loginCounter >= MAX_LOGIN_ATTEMPTS - 1) {
       const blockedUntil = new Date().getTime() + BLOCK_TIME;
-      localStorage.setItem('block', blockedUntil.toString());
-      setTimeout(() => {
-        this.loginCounter = 0;
-        this.loginCounterListener.next(this.loginCounter);
-        localStorage.removeItem('block');
-      }, BLOCK_TIME);
+      this.blockUser(blockedUntil);
+      this.httpClinet.post<{ message: string }>(USER_API_URL + '/ban', {email: email})
+        .subscribe((response) => {
+          console.log(response);
+        });
     }
+  }
+
+  private blockUser(blockedUntil) {
+    localStorage.setItem('block', blockedUntil.toString());
+    setTimeout(() => {
+      this.loginCounter = 1;
+      this.loginCounterListener.next(this.loginCounter);
+      localStorage.removeItem('block');
+    }, BLOCK_TIME);
   }
 
   private clearLoginCounter() {
     localStorage.removeItem('loginAttempts');
-    this.loginCounter = 0;
+    this.loginCounter = 1;
   }
 }
