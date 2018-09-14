@@ -35,7 +35,7 @@ export class MoveDialogComponent implements OnInit {
     this.galleryService.getAllAlbums()
       .subscribe((response) => {
         this.form = new FormGroup({
-          'album': new FormControl(null, {validators: [Validators.required]})
+          'album': new FormControl(null)
         });
         this.form.setValue({
             'album': this.currentMedia.parentId
@@ -76,14 +76,15 @@ export class MoveDialogComponent implements OnInit {
     }
     this.isLoading = true;
     if (this.mediaType === 'album') {
-      this.galleryService.updateAlbum(this.currentMedia._id, this.currentMedia.title, this.form.value.album);
+      this.galleryService.updateAlbum(this.currentMedia._id, this.currentMedia.title, this.form.value.album, this.currentMedia.parentId);
     } else {
       this.galleryService.updatePhoto(
         this.currentMedia._id,
         this.currentMedia.title,
         this.currentMedia.image,
         this.currentMedia.thumbnail,
-        this.form.value.album);
+        this.form.value.album,
+        this.currentMedia.parentId);
     }
     this.form.reset();
   }
@@ -92,13 +93,15 @@ export class MoveDialogComponent implements OnInit {
     return new Array(i);
   }
 
-  private unFlattenAlbum(array, parent = null,  lvl = 0) {
+  private unFlattenAlbum(array, parent = null, lvl = 0) {
     const self = this;
 
     let tree = [];
-    parent = parent ? parent : { _id: '' };
+    parent = parent ? parent : {_id: ''};
 
-    const children = array.filter(function(child) { return child.parentId === parent._id; });
+    const children = array.filter(function (child) {
+      return child.parentId === parent._id;
+    });
 
     if (children.length) {
       if (parent._id === '') {
@@ -106,10 +109,10 @@ export class MoveDialogComponent implements OnInit {
       } else {
         parent['children'] = children;
       }
-      children.forEach(function(child) {
+      children.forEach(function (child) {
         child['lvl'] = lvl;
-        self.unFlattenAlbum( array, child, lvl + 1 );
-      } );
+        self.unFlattenAlbum(array, child, lvl + 1);
+      });
     }
 
     return tree;

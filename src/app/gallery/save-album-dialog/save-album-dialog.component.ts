@@ -31,6 +31,9 @@ export class SaveAlbumDialogComponent implements OnInit {
     this.form = new FormGroup({
       'title': new FormControl(null, {validators: [Validators.required, Validators.minLength(3)]})
     });
+    this.mode = 'CREATE';
+    this.id = null;
+
     if (this.data.id) {
       this.mode = 'EDIT';
       this.id = this.data.id;
@@ -42,10 +45,8 @@ export class SaveAlbumDialogComponent implements OnInit {
           'title': this.album.title
         });
       });
-    } else {
-      this.mode = 'CREATE';
-      this.id = null;
     }
+
     this.albumsSubscriber = this.galleryService.getAlbumsObservable()
       .subscribe(() => {
         this.dialogRef.close();

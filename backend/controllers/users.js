@@ -54,8 +54,7 @@ exports.loginUser = (req, res, next) => {
       }
       return Bans.findOne({userId: user._id}, {}, {sort: {_id: -1}})
         .then((bansResult) => {
-          console.log(bansResult.expiresIn.getTime() > new Date().getTime());
-          if (bansResult.expiresIn.getTime() > new Date().getTime()) {
+          if (bansResult && bansResult.expiresIn.getTime() > new Date().getTime()) {
             formattedDate = bansResult.expiresIn.getHours() + ':' + bansResult.expiresIn.getMinutes() + ':' + bansResult.expiresIn.getSeconds() +
               ' ' + bansResult.expiresIn.getDate() + '/' + (bansResult.expiresIn.getMonth() + 1) + '/' + bansResult.expiresIn.getFullYear();
             ban = bansResult;

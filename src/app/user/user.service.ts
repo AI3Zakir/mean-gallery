@@ -77,6 +77,7 @@ export class UserService {
     };
     return this.httpClinet.post<{ message: string, token: string, expiresIn: number, user: User }>(USER_API_URL + '/signup', registerData)
       .subscribe((response) => {
+        this.clearLoginCounter();
         this.authenticate(response);
       }, (error) => {
         this.authStatusListener.next(false);
@@ -210,6 +211,7 @@ export class UserService {
   }
 
   private clearLoginCounter() {
+    localStorage.removeItem('block');
     localStorage.removeItem('loginAttempts');
     this.loginCounter = 1;
   }

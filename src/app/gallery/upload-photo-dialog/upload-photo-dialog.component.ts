@@ -36,6 +36,8 @@ export class UploadPhotoDialogComponent implements OnInit {
       'title': new FormControl(null, {validators: [Validators.required, Validators.minLength(3)]}),
       'image': new FormControl(null, {validators: [Validators.required], asyncValidators: [mimeType]})
     });
+    this.mode = 'CREATE';
+    this.id = null;
     if (this.data.id) {
       this.mode = 'EDIT';
       this.id = this.data.id;
@@ -49,9 +51,6 @@ export class UploadPhotoDialogComponent implements OnInit {
         });
         this.imagePreview = this.serverUrl + this.photo.thumbnail;
       });
-    } else {
-      this.mode = 'CREATE';
-      this.id = null;
     }
     this.photosSubscriber = this.galleryService.getPhotosObservable()
       .subscribe(() => {

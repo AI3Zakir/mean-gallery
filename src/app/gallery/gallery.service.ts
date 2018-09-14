@@ -38,7 +38,7 @@ export class GalleryService {
       });
   }
 
-  updatePhoto(id: string, title: string, image: File | string, thumbnail: string, parentId: string = '') {
+  updatePhoto(id: string, title: string, image: File | string, thumbnail: string, parentId: string = '', currentAlbumId: string = null) {
     let photoData: Photo | FormData;
     if (typeof(image) === 'object') {
       photoData = new FormData();
@@ -51,11 +51,10 @@ export class GalleryService {
     }
     this.httpClient.put<{ message: string, photo: Photo }>(PHOTOS_API_URL + '/' + id, photoData)
       .subscribe(response => {
-        const updatedPosts = [...this.photos];
-        const oldPostIndex = updatedPosts.findIndex(p => p._id === id);
-        updatedPosts[oldPostIndex] = response.photo;
-        this.photos = updatedPosts;
-        this.photosUpdated.next([...this.photos]);
+        if (currentAlbumId == null) {
+          currentAlbumId = parentId;
+        }
+        this.getPhotos(currentAlbumId);
       });
   }
 
@@ -92,15 +91,14 @@ export class GalleryService {
       });
   }
 
-  updateAlbum(id: string, title: string, parentId: string = '') {
+  updateAlbum(id: string, title: string, parentId: string = '', currentAlbumId: string = null) {
     const albumData: Album = {_id: id, title: title, parentId: parentId, userId: null};
     this.httpClient.put<{ message: string, album: Album }>(ALBUMS_API_URL + '/' + id, albumData)
       .subscribe(response => {
-        const updatedPosts = [...this.albums];
-        const oldPostIndex = updatedPosts.findIndex(p => p._id === id);
-        updatedPosts[oldPostIndex] = response.album;
-        this.albums = updatedPosts;
-        this.albumsUpdated.next([...this.albums]);
+        if (currentAlbumId == null) {
+          currentAlbumId = parentId;
+        }
+        this.getAlbums(currentAlbumId);
       });
   }
 
